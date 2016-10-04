@@ -53,6 +53,10 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
         $template->basePath = $this->basePath;
+        $template->min = $this->value['min'];
+        $template->max = $this->value['max'];
+        $template->from = $this->value['from'];
+        $template->to = $this->value['to'];        
         $template->setFile(__DIR__ .  '/templates/footer.latte');
         return $template->render();
     }
