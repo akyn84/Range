@@ -24,10 +24,12 @@ Add to template:
 
     <a href="#" onclick="submitRange();">{input yourSubmitButton}</a>
 
-Call from form:
-
+Add in MyForm::attached:
 	$this->addRange('myRangeId', 'My range label')
-        ->setDefaultValue($defaults);
+        ->setDefaultValue('min'=>$minimalValue,'max'=>$maximalValue,'from'=>$fromValue,'to'=>$toValue);
+
+Add in MyForm::render:
+    $this->templates->ranges = ['myRangeId','myOtherRangeId'];
 
 In formSucced method you will get array:
 
