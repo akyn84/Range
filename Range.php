@@ -34,8 +34,8 @@ class Range extends Controls\BaseControl {
     }
 
     public function getValue() {
-        return [(isset($cookies['range-from'])) ? cookies['range-from'] : $this->value['from'],
-                  (isset($cookies['range-to'])) ? cookies['range-to'] : $this->value['to'],  
+        return [(isset($this->cookies['range-from'])) ? cookies['range-from'] : $this->value['from'],
+                  (isset($this->cookies['range-to'])) ? cookies['range-to'] : $this->value['to'],  
         ];
     }
 

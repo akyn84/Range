@@ -26,7 +26,8 @@ Add to template:
 
 Call from form:
 
-	$this->addRange('myRangeId', 'My range label');
+	$this->addRange('myRangeId', 'My range label')
+        ->setDefaultValue($defaults);
 
 In formSucced method you will get array:
 
