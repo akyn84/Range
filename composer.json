@@ -9,7 +9,7 @@
 			"email":    "landrisek@gmail.com",
 			"homepage": "http://www.4camping.cz",
 			"role":     "developer"
-		},
+		}
 	],
 	"autoload": {
 		"psr-0": {
