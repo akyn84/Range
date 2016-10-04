@@ -24,8 +24,10 @@ class Range extends Controls\BaseControl {
     }
 
     public function __construct($label = null, Request $request) {
-	parent::__construct($label);
+	    parent::__construct($label);
+        $url = $request->getUrl();
         $this->cookies = $request->getCookies();
+        $this->basePath = $url->scheme . '://' . $url->host . $url->scriptPath . 'vendor/landrisek/nette-range';
     }
 
     /** getters */
@@ -34,15 +36,15 @@ class Range extends Controls\BaseControl {
     }
 
     public function getValue() {
-        return [(isset($this->cookies['range-from'])) ? cookies['range-from'] : $this->value['from'],
-                  (isset($this->cookies['range-to'])) ? cookies['range-to'] : $this->value['to'],  
+        return ['from' => $this->cookies['range-from'],
+                'to' => $this->cookies['range-to']  
         ];
     }
 
     public function renderHead() {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
-        $template->basePath = __DIR__;
+        $template->basePath = $this->basePath;
         $template->setFile(__DIR__ .  '/templates/head.latte');
         return $template->render();
     }
@@ -50,7 +52,7 @@ class Range extends Controls\BaseControl {
     public function renderFooter() {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
-        $template->basePath = __DIR__;
+        $template->basePath = $this->basePath;
         $template->setFile(__DIR__ .  '/templates/footer.latte');
         return $template->render();
     }
