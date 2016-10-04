@@ -2,8 +2,19 @@ Range
 ==================
 Range extension for nette forms
 
-Required settings:
+Demo
+----
+- Demo page: http://cadron.cz/demos/nette-range
+- Composer package: https://packagist.org/packages/landrisek/nette-range
 
+Installation
+------------
+1. Install [composer](https://getcomposer.org/download/) if you don't have it yet
+2. run `composer require landrisek/nette-range:1.*`
+3. Copy files from nette-range/assets to your www/assets and include them into your template or follow Optional settings
+
+Required settings
+-----------------
 Edit your config.neon  
 
 extensions:
@@ -25,7 +36,8 @@ In formSucced method you will get array:
         $to = $values['myRangeId']['to'];
     }
 
-Optional setting:
+Optional settings
+-----------------
 
 Edit your config.neon: 
 

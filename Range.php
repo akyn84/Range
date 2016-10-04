@@ -3,19 +3,20 @@
 namespace Range;
 
 use Latte\Engine,
-	Nette\Bridges,
+    Nette\Bridges,
     Nette\Http\Request,
     Nette\Forms\Controls\TextInput,
-	Nette\Utils\Html;
+    Nette\Utils\Html,
+    Nette\Forms\Controls;
 
 /** @author Lubo Andrisek */
-class Range extends TextInput {
+class Range extends Controls\BaseControl {
 
     /** @var string */
     private $basePath;
 
     /** @var Array */
-    private $range;
+    private $cookies;
 
     /** @return IRangeFactory */
     public function create() {
@@ -23,26 +24,25 @@ class Range extends TextInput {
     }
 
     public function __construct($label = null, Request $request) {
-		parent::__construct($label);
-        $url = $request->getUrl();
-        $cookies = $request->getCookies();
-        $this->range = ['from' => $cookies['range-from'],'to' => $cookies['range-to']];
-        $this->basePath = $url->scheme . '://' . $url->host . $url->scriptPath;
-	}
+	parent::__construct($label);
+        $this->cookies = $request->getCookies();
+    }
 
     /** getters */
-	public function getControl() {
+    public function getControl() {
         return '<div class="buffer"><div id="date-slider"></div></div>';
-	}
+    }
 
     public function getValue() {
-        return $this->range;
+        return [(isset($cookies['range-from'])) ? cookies['range-from'] : $this->value['from'],
+                  (isset($cookies['range-to'])) ? cookies['range-to'] : $this->value['to'],  
+        ];
     }
 
     public function renderHead() {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
-        $template->basePath = $this->basePath;
+        $template->basePath = __DIR__;
         $template->setFile(__DIR__ .  '/templates/head.latte');
         return $template->render();
     }
@@ -50,7 +50,7 @@ class Range extends TextInput {
     public function renderFooter() {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
-        $template->basePath = $this->basePath;
+        $template->basePath = __DIR__;
         $template->setFile(__DIR__ .  '/templates/footer.latte');
         return $template->render();
     }
