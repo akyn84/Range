@@ -10,7 +10,7 @@ use Latte\Engine,
     Nette\Forms\Controls;
 
 /** @author Lubo Andrisek */
-class Range extends Controls\BaseControl {
+class Range extends Controls\BaseControl implements IRangeFactory {
 
     /** @var string */
     private $basePath;
