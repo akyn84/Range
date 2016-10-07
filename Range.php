@@ -37,6 +37,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         if ($form instanceof Form) {
             $parent = $this->getForm()->getParent();
             $this->key = (is_object($parent)) ? $parent->getName() : $this->getForm()->getName();
+            $this->key .= '-' . $this->getName() . '-';
         }
     }
 
@@ -52,8 +53,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     }
 
     public function getValue() {
-        return ['from' => $this->cookies[$this->key . '-range-from'],
-            'to' => $this->cookies[$this->key . '-range-to']
+        return ['from' => $this->cookies[$this->key . 'range-from'],
+            'to' => $this->cookies[$this->key . 'range-to']
         ];
     }
 

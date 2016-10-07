@@ -26,8 +26,8 @@
         function submitRange() {
             var currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 30 * 60 * 1000);
-            document.cookie = {$key} + '-range-from=' + $('<div>').append($('#date-slider .ui-rangeSlider-leftLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
-            document.cookie = {$key} + '-range-to=' + $('<div>').append($('#date-slider .ui-rangeSlider-rightLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
+            document.cookie = {$key} + 'range-from=' + $('<div>').append($('#date-slider .ui-rangeSlider-leftLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
+            document.cookie = {$key} + 'range-to=' + $('<div>').append($('#date-slider .ui-rangeSlider-rightLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
         }
         $(document).ready(function () {
             $(window).keydown(function (event) {
