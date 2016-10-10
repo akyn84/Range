@@ -73,8 +73,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $template->key = $this->key;
         $template->min = $this->value['min'];
         $template->max = $this->value['max'];
-        $template->from = (isset($this->cookies[$this->key . '-range-from'])) ? $this->cookies[$this->key . '-range-from'] : $this->value['from'];
-        $template->to = (isset($this->cookies[$this->key . '-range-to'])) ? $this->cookies[$this->key . '-range-to'] :$this->value['to'];
+        $template->from = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->value['from'];
+        $template->to = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] :$this->value['to'];
         $template->setFile(__DIR__ . '/templates/footer.latte');
         return $template->render();
     }
