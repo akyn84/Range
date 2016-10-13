@@ -1,34 +1,12 @@
-{block #head}
-    <link rel="stylesheet" id="themeCSS" href="{$basePath}/assets/jQRangeSlider-5.7.2/css/iThing.css">
-    <link rel="stylesheet" href="{$basePath}/assets/jQRangeSlider-5.7.2/demo/style.css">
-    <script type="text/javascript"> var td = $('td.grid-col-actions'); </script>
-    <!--script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script-->
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/lib/jquery-1.10.2.min.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/lib/jquery-ui.min.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/lib/jquery.mousewheel.min.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSliderMouseTouch.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSliderDraggable.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSliderHandle.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSliderBar.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSliderLabel.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQRangeSlider.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQDateRangeSliderHandle.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQDateRangeSlider.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQEditRangeSliderLabel.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/jQEditRangeSlider.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/demo/sliderDemo.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/demo/dateSliderDemo.js"></script>
-    <script src="{$basePath}/assets/jQRangeSlider-5.7.2/demo/editSliderDemo.js"></script>
-{/block}
 {block footer}
     <script type="text/javascript">
-        function submitRange() {
+        var id = '#frm-' + {$id};
+        $(id).on('click', function(){
             var currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 30 * 60 * 1000);
             document.cookie = {$key} + 'range-from=' + $('<div>').append($('#date-slider .ui-rangeSlider-leftLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
             document.cookie = {$key} + 'range-to=' + $('<div>').append($('#date-slider .ui-rangeSlider-rightLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
-        }
+        });
         $(document).ready(function () {
             $(window).keydown(function (event) {
                 if (event.keyCode == 13) {

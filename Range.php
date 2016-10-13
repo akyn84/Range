@@ -20,6 +20,9 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     /** @var string */
     private $key;
     
+    /** @var string */
+    private $id;
+    
     /** @return IRangeFactory */
     public function create() {
         return $this;
@@ -38,6 +41,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
             $parent = $this->getForm()->getParent();
             $this->key = (is_object($parent)) ? $parent->getName() : $this->getForm()->getName();
             $this->key .= '-' . $this->getName() . '-';
+            $this->id = (is_object($parent)) ? $parent->getName() . '-' . $this->getForm()->getName() : $this->getForm()->getName();
         }
     }
 
@@ -71,6 +75,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $template = new Bridges\ApplicationLatte\Template($latte);
         $template->basePath = $this->basePath;
         $template->key = $this->key;
+        $template->id = $this->id;
         $template->min = $this->value['min'];
         $template->max = $this->value['max'];
         $template->from = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->value['from'];
