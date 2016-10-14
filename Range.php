@@ -17,21 +17,25 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     /** @var Array */
     private $cookies;
 
+    /** @var Array */
+    private $defaults;
+
     /** @var string */
     private $key;
-    
+
     /** @var string */
     private $id;
-    
+
     /** @return IRangeFactory */
     public function create() {
         return $this;
     }
 
-    public function __construct($label = null, Request $request) {
+    public function __construct($label = null, Array $defaults = [], Request $request) {
         parent::__construct($label);
         $url = $request->getUrl();
-        $this->cookies = $request->getCookies(); 
+        $this->cookies = $request->getCookies();
+        $this->defaults = $defaults;
         $this->basePath = $url->scheme . '://' . $url->host . $url->scriptPath . 'vendor/landrisek/nette-range';
     }
 
@@ -41,6 +45,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
             $parent = $this->getForm()->getParent();
             $this->key = (is_object($parent)) ? $parent->getName() : $this->getForm()->getName();
             $this->key .= '-' . $this->getName() . '-';
+            $this->cookies[$this->key . 'range-from'] = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->defaults['from'];
+            $this->cookies[$this->key . 'range-to'] = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] : $this->defaults['to'];
             $this->id = (is_object($parent)) ? $parent->getName() . '-' . $this->getForm()->getName() : $this->getForm()->getName();
         }
     }
@@ -73,13 +79,14 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     public function renderFooter() {
         $latte = new Engine();
         $template = new Bridges\ApplicationLatte\Template($latte);
+        $template->link = $this->getForm()->getPresenter()->link('this');
         $template->basePath = $this->basePath;
         $template->key = $this->key;
         $template->id = $this->id;
-        $template->min = $this->value['min'];
-        $template->max = $this->value['max'];
-        $template->from = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->value['from'];
-        $template->to = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] :$this->value['to'];
+        $template->min = $this->defaults['min'];
+        $template->max = $this->defaults['max'];
+        $template->from = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->defaults['from'];
+        $template->to = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] : $this->defaults['to'];
         $template->setFile(__DIR__ . '/templates/footer.latte');
         return $template->render();
     }
