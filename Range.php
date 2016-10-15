@@ -45,8 +45,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
             $parent = $this->getForm()->getParent();
             $this->key = (is_object($parent)) ? $parent->getName() : $this->getForm()->getName();
             $this->key .= '-' . $this->getName() . '-';
-            $this->cookies[$this->key . 'range-from'] = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->defaults['from'];
-            $this->cookies[$this->key . 'range-to'] = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] : $this->defaults['to'];
+            $this->cookies[$this->key . '>'] = (isset($this->cookies[$this->key . '>'])) ? $this->cookies[$this->key . '>'] : $this->defaults['>'];
+            $this->cookies[$this->key . '<'] = (isset($this->cookies[$this->key . '<'])) ? $this->cookies[$this->key . '<'] : $this->defaults['<'];
             $this->id = (is_object($parent)) ? $parent->getName() . '-' . $this->getForm()->getName() : $this->getForm()->getName();
         }
     }
@@ -63,8 +63,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     }
 
     public function getValue() {
-        return ['from' => $this->cookies[$this->key . 'range-from'],
-            'to' => $this->cookies[$this->key . 'range-to']
+        return ['>' => $this->cookies[$this->key . '>'],
+            '<' => $this->cookies[$this->key . '<']
         ];
     }
 
@@ -85,8 +85,8 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $template->id = $this->id;
         $template->min = $this->defaults['min'];
         $template->max = $this->defaults['max'];
-        $template->from = (isset($this->cookies[$this->key . 'range-from'])) ? $this->cookies[$this->key . 'range-from'] : $this->defaults['from'];
-        $template->to = (isset($this->cookies[$this->key . 'range-to'])) ? $this->cookies[$this->key . 'range-to'] : $this->defaults['to'];
+        $template->from = (isset($this->cookies[$this->key . '>'])) ? $this->cookies[$this->key . '>'] : $this->defaults['>'];
+        $template->to = (isset($this->cookies[$this->key . '<'])) ? $this->cookies[$this->key . '<'] : $this->defaults['<'];
         $template->setFile(__DIR__ . '/templates/footer.latte');
         return $template->render();
     }
