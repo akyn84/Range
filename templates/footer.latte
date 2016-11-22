@@ -17,11 +17,22 @@
             var max = new Date({$max});
             var from = new Date({$from});
             var to = new Date({$to});
+            $( "div#float-slider" ).slider({
+                  range: true,
+                  min: parseFloat({$min}),
+                  max: parseFloat({$max}),
+                  step: 0.1,
+                  values: [ parseFloat({$from}), parseFloat({$to}) ],
+                  slide: function( event, ui ) {
+                    /** $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] ); */
+                    $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );                  
+                  }
+            });
+            $( "#amount" ).val( $( "div#float-slider" ).slider( "values", 0 ) + " - " + $( "div#float-slider" ).slider( "values", 1 ) );
             $("div#edit-slider").editRangeSlider({
-                /*range: { min: 0, max: 2},
-                 * step: 10,*/
-                defaultValues: { min: min, max: max},
-                bounds: { min: 0, max: 10}
+                step: 1,
+                defaultValues: { min: {$min}, max: {$max}},
+                bounds: { min: {$from}, max: {$to}}
             });
             $("div#date-slider").dateRangeSlider({
                 /*bounds: { min: new Date(2015, 0, 1), max: new Date(2016, 11, 31, 12, 59, 59)},*/
@@ -47,8 +58,7 @@
                     }
                 }]
             });
-
-            $('div.ui-rangeSlider-label-value').append('<p>KS</p>');
+            $('div.ui-rangeSlider-label-value').append('<p>' + {_'amount'} + '</p>');
         });
     </script>
 {/block}

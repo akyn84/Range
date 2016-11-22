@@ -3,14 +3,18 @@
 namespace Range;
 
 use Latte\Engine,
+    Nette\Application\UI\Form,
     Nette\Bridges,
     Nette\Http\Request,
     Nette\Forms\Controls,
-    Nette\Application\UI\Form;
+    Nette\Localization\ITranslator;
 
-/** @author Lubo Andrisek */
+/** @author Lubomir Andrisek */
 class Range extends Controls\BaseControl implements IRangeFactory {
 
+    /** @var ITranslator */
+    private $translator;
+    
     /** @var string */
     private $basePath;
 
@@ -24,6 +28,9 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     private $key;
 
     /** @var string */
+    protected $label;
+
+    /** @var string */
     private $id;
 
     /** @return IRangeFactory */
@@ -31,11 +38,12 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         return $this;
     }
 
-    public function __construct($label = null, Array $defaults = [], Request $request) {
+    public function __construct($label = null, Array $defaults = [], Request $request, ITranslator $translator) {
         parent::__construct($label);
         $url = $request->getUrl();
         $this->cookies = $request->getCookies();
         $this->defaults = $defaults;
+        $this->translator = $translator;
         $this->basePath = $url->scheme . '://' . $url->host . $url->scriptPath . 'vendor/landrisek/nette-range';
     }
 
@@ -59,7 +67,17 @@ class Range extends Controls\BaseControl implements IRangeFactory {
 
     /** getters */
     public function getControl() {
-        return '<div class="buffer"><div id="date-slider"></div></div>';
+        if ((bool) strpbrk($this->cookies[$this->key . '>'], 1234567890) and
+                strtotime($this->cookies[$this->key . '>']) and
+                (bool) strpbrk($this->cookies[$this->key . '<'], 1234567890) and
+                strtotime($this->cookies[$this->key . '<'])) {
+            return '<div class="buffer"><div id="date-slider"></div></div>';
+        } elseif(preg_match('/\./', $this->cookies[$this->key . '>']) or preg_match('/\./', $this->cookies[$this->key . '<'])) {
+            return  '<label for="amount">' . $this->translator->translate($this->label) . ':</label><input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">' .
+                    '<div class="buffer"><div id="float-slider"></div></div>';
+        } else {
+            return '<div class="buffer"><div id="edit-slider"></div></div>';
+        }
     }
 
     public function getValue() {
@@ -88,6 +106,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $template->from = (isset($this->cookies[$this->key . '>'])) ? $this->cookies[$this->key . '>'] : $this->defaults['>'];
         $template->to = (isset($this->cookies[$this->key . '<'])) ? $this->cookies[$this->key . '<'] : $this->defaults['<'];
         $template->setFile(__DIR__ . '/templates/footer.latte');
+        $template->setTranslator($this->translator);
         return $template->render();
     }
 
