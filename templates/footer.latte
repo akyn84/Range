@@ -3,8 +3,15 @@
         function submitRange() {
             var currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 30 * 60 * 1000);
-            document.cookie = {$key} + '>=' + $('<div>').append($('#date-slider .ui-rangeSlider-leftLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
-            document.cookie = {$key} + '<=' + $('<div>').append($('#date-slider .ui-rangeSlider-rightLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
+            if('float' === {$type}) {
+                var amount = $('input#amount').val().split(' ');
+                console.log(amount[0], amount[2]);
+                document.cookie = {$key} + '>=' + amount[0] + ';expires=' + currentDate;
+                document.cookie = {$key} + '<=' + amount[2] + ';expires=' + currentDate;
+            } else {
+                document.cookie = {$key} + '>=' + $('<div>').append($('#' + {$type} + '-slider .ui-rangeSlider-leftLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
+                document.cookie = {$key} + '<=' + $('<div>').append($('#' + {$type} + '-slider .ui-rangeSlider-rightLabel .ui-rangeSlider-label-value').clone()).text() + ';expires=' + currentDate;
+            }    
         };
         $(document).ready(function () {
             $(window).keydown(function (event) {
@@ -17,48 +24,52 @@
             var max = new Date({$max});
             var from = new Date({$from});
             var to = new Date({$to});
-            $( "div#float-slider" ).slider({
+            $( 'div#float-slider' ).slider({
                   range: true,
                   min: parseFloat({$min}),
                   max: parseFloat({$max}),
                   step: 0.1,
                   values: [ parseFloat({$from}), parseFloat({$to}) ],
                   slide: function( event, ui ) {
-                    /** $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] ); */
-                    $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );                  
+                    /** $( '#amount' ).val( '$' + ui.values[ 0 ] + ' - $' + ui.values[ 1 ] ); */
+                    $( '#amount' ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );                  
                   }
             });
-            $( "#amount" ).val( $( "div#float-slider" ).slider( "values", 0 ) + " - " + $( "div#float-slider" ).slider( "values", 1 ) );
-            $("div#edit-slider").editRangeSlider({
-                step: 1,
-                defaultValues: { min: {$min}, max: {$max}},
-                bounds: { min: {$from}, max: {$to}}
-            });
-            $("div#date-slider").dateRangeSlider({
-                /*bounds: { min: new Date(2015, 0, 1), max: new Date(2016, 11, 31, 12, 59, 59)},*/
-                bounds: { min: min, max: max},
-                /* defaultValues: { min: new Date(2015, 1, 10), max: new Date(2016, 4, 22)},*/
-                defaultValues: { min: from, max: to},
-                scales: [{
-                    first: function (value) {
-                        return value;
-                    },
-                    end: function (value) {
-                        return value;
-                    },
-                    next: function (value) {
-                        var next = new Date(value);
-                        return new Date(next.setMonth(value.getMonth() + 1));
-                    },
-                    label: function (value) {
-                        return months[value.getMonth()];
-                    },
-                    format: function (tickContainer, tickStart, tickEnd) {
-                        tickContainer.addClass("myCustomClass");
-                    }
-                }]
-            });
-            $('div.ui-rangeSlider-label-value').append('<p>' + {_'amount'} + '</p>');
+            $( '#amount' ).val( $( 'div#float-slider' ).slider( 'values', 0 ) + ' - ' + $( 'div#float-slider' ).slider( 'values', 1 ) );
+            if('edit' === {$type}) {
+                $('div#edit-slider').editRangeSlider({
+                    step: 1,
+                    defaultValues: { min: {$min}, max: {$max}},
+                    bounds: { min: {$from}, max: {$to}}
+                });
+                $('div.ui-rangeSlider-label-value').append('<p>' + {_'amount'} + '</p>');
+            }
+            if('date' === {$type}) {
+                $('div#date-slider').dateRangeSlider({
+                    /*bounds: { min: new Date(2015, 0, 1), max: new Date(2016, 11, 31, 12, 59, 59)},*/
+                    bounds: { min: min, max: max},
+                    /* defaultValues: { min: new Date(2015, 1, 10), max: new Date(2016, 4, 22)},*/
+                    defaultValues: { min: from, max: to},
+                    scales: [{
+                        first: function (value) {
+                            return value;
+                        },
+                        end: function (value) {
+                            return value;
+                        },
+                        next: function (value) {
+                            var next = new Date(value);
+                            return new Date(next.setMonth(value.getMonth() + 1));
+                        },
+                        label: function (value) {
+                            return months[value.getMonth()];
+                        },
+                        format: function (tickContainer, tickStart, tickEnd) {
+                            tickContainer.addClass("myCustomClass");
+                        }
+                    }]
+                });
+            }
         });
     </script>
 {/block}

@@ -25,6 +25,9 @@ class Range extends Controls\BaseControl implements IRangeFactory {
     private $defaults;
 
     /** @var string */
+    private $type;
+    
+    /** @var string */
     private $key;
 
     /** @var string */
@@ -43,6 +46,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $url = $request->getUrl();
         $this->cookies = $request->getCookies();
         $this->defaults = $defaults;
+        $this->label = $label;
         $this->translator = $translator;
         $this->basePath = $url->scheme . '://' . $url->host . $url->scriptPath . 'vendor/landrisek/nette-range';
     }
@@ -71,11 +75,14 @@ class Range extends Controls\BaseControl implements IRangeFactory {
                 strtotime($this->cookies[$this->key . '>']) and
                 (bool) strpbrk($this->cookies[$this->key . '<'], 1234567890) and
                 strtotime($this->cookies[$this->key . '<'])) {
+            $this->type = 'date';
             return '<div class="buffer"><div id="date-slider"></div></div>';
         } elseif(preg_match('/\./', $this->cookies[$this->key . '>']) or preg_match('/\./', $this->cookies[$this->key . '<'])) {
-            return  '<label for="amount">' . $this->translator->translate($this->label) . ':</label><input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">' .
+            $this->type = 'float';
+            return  '<label for="amount">' . $this->translator->translate($this->label) . ':</label><input type="text" id="amount" readonly style="border:0; font-weight:bold;">' .
                     '<div class="buffer"><div id="float-slider"></div></div>';
         } else {
+            $this->type = 'edit';
             return '<div class="buffer"><div id="edit-slider"></div></div>';
         }
     }
@@ -103,6 +110,7 @@ class Range extends Controls\BaseControl implements IRangeFactory {
         $template->id = $this->id;
         $template->min = $this->defaults['min'];
         $template->max = $this->defaults['max'];
+        $template->type = $this->type;
         $template->from = (isset($this->cookies[$this->key . '>'])) ? $this->cookies[$this->key . '>'] : $this->defaults['>'];
         $template->to = (isset($this->cookies[$this->key . '<'])) ? $this->cookies[$this->key . '<'] : $this->defaults['<'];
         $template->setFile(__DIR__ . '/templates/footer.latte');
