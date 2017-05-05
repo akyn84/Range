@@ -4,7 +4,6 @@ Range extension for nette forms
 
 Demo
 ----
-- Demo page: http://cadron.cz/demos/nette-range
 - Composer package: https://packagist.org/packages/landrisek/nette-range
 
 Installation
